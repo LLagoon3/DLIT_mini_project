@@ -1,0 +1,77 @@
+version: '3'
+services:
+  mysql:
+    container_name: DL_PROJ_mysql-server
+    build:
+      context: ./
+      dockerfile: Dockerfile_mysql
+    volumes:
+      - ./database_mysql:/var/lib/mysql
+    # command: 
+    #   - bash
+    #   - -c
+    #   - |
+    #     mkdir -p /tmp/mysql &&
+    #     tail -f /dev/null
+    #     python3 manage.py makemigrations &&
+        
+    ports:
+      - "3308:3306"
+    networks:
+      - dl-proj-network
+
+  django:
+    container_name: DL_PROJ_django
+    depends_on:
+      - mysql
+    healthcheck:
+      test: ["CMD", "curl", "-f", "0.0.0.0:3308"]  # db 서비스의 상태를 확인하는 테스트
+      interval: 10s  # 10초마다 테스트 수행
+      retries: 5  # 최대 5번 재시도
+      timeout: 5s
+    build:
+      context: ./
+      dockerfile: Dockerfile_django
+    volumes:
+      - ./backend_django:/home/backend_django
+    command: 
+      - bash
+      - -c
+      - |
+        cd /home/backend_django &&
+        pip install -r requirements.txt &&
+        python3 manage.py makemigrations &&
+        python3 manage.py migrate &&
+        python3 runserver 0.0.0.0:8000
+        # tail -f /dev/null
+    ports: 
+      - "8001:8000"
+    expose:
+      - "8000"
+    networks:
+      - dl-proj-network
+
+  react-app:
+    depends_on:
+      - django
+    build:
+      context: .
+      dockerfile: Dockerfile_react
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend_react:/home/frontend_react
+    command: 
+      - bash
+      - -c
+      - |
+        cd /home/frontend_react &&
+        npm install &&
+        # tail -f /dev/null
+        npm start
+    networks:
+      - dl-proj-network
+
+networks:
+  dl-proj-network:
+    driver: bridge
