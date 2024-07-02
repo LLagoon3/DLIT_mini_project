@@ -42,10 +42,10 @@ services:
         pip install -r requirements.txt &&
         python3 manage.py makemigrations &&
         python3 manage.py migrate &&
-        python3 runserver 0.0.0.0:8000
+        python3 manage.py runserver 0.0.0.0:8000
         # tail -f /dev/null
     ports: 
-      - "8001:8000"
+      - "8000:8000"
     expose:
       - "8000"
     networks:
