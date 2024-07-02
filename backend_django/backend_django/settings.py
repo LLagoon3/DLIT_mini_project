@@ -32,6 +32,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8000",# React 애플리케이션이 실행되는 주소
     "http://0.0.0.0:8000",
+    "http://0.0.0.0:8001",
+    "http://localhost:8001",
     "http://172.21.0.4:3000",
 ]
 
