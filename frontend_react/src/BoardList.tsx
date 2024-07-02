@@ -3,6 +3,8 @@ import Axios from "axios";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
+const BACKEND_URL = "http://localhost:8000/api/board/";
+
 const Board = ({
     id,
     title,
@@ -63,7 +65,7 @@ class BoardList extends Component<IProps> {
     };
 
     getList = () => {
-        Axios.get("http://localhost:8000/api/board/")
+        Axios.get(BACKEND_URL)
             .then((res) => {
                 const { data } = res;
                 this.setState({
@@ -137,7 +139,7 @@ class BoardList extends Component<IProps> {
     
         // 선택된 게시글 ID 목록을 순회하며 DELETE 요청을 생성
         const deletePromises = this.state.checkList.map((id: any) => {
-            return Axios.delete(`http://localhost:8000/api/board/${id}/`)
+            return Axios.delete(BACKEND_URL + id + '/')
                 .catch((e) => {
                     console.error(`Failed to delete board with ID ${id}:`, e);
                 });

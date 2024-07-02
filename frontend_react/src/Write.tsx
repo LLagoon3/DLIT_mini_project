@@ -3,6 +3,8 @@ import Axios from "axios";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
+const BACKEND_URL = "http://localhost:8000/api/board/";
+
 interface IProps {
     isModifyMode: boolean;
     boardId: number;
@@ -33,7 +35,7 @@ class Write extends Component<IProps> {
     };
 
     write = () => {
-        Axios.post("http://localhost:8000/api/board/", {
+        Axios.post(BACKEND_URL, {
             title: this.state.title,
             content: this.state.content,
         })
@@ -50,7 +52,7 @@ class Write extends Component<IProps> {
     };
 
     update = () => {
-        Axios.put(`http://localhost:8000/api/board/${this.props.boardId}/`, {
+        Axios.put(BACKEND_URL + this.props.boardId + '/', {
             title: this.state.title,
             content: this.state.content,
             id: this.props.boardId,
@@ -68,7 +70,7 @@ class Write extends Component<IProps> {
     };
 
     detail = () => {
-        Axios.get(`http://localhost:8000/api/board/${this.props.boardId}`)
+        Axios.get(BACKEND_URL + this.props.boardId + '/')
             .then((res) => {
                 if (res.data.length > 0) {
                     this.setState({
