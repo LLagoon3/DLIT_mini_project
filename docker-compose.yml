@@ -67,6 +67,8 @@ services:
       - |
         cd /home/frontend_react &&
         npm install &&
+        npm i -g n &&
+        n 16 &&
         # tail -f /dev/null
         npm start
     networks:
